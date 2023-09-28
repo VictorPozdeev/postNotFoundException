@@ -62,6 +62,8 @@ class WallServiceTest {
             attachment = emptyArray()
         )
 
+    private val firstComment = Comments(text = "The first comment in the first post!", attachment = null)
+
     @Before
     fun clearBeforeTest() {
         WallService.clear()
@@ -105,5 +107,24 @@ class WallServiceTest {
         val result = wall.update(update)
 
         assertFalse(result)
+    }
+
+    @Test
+    fun addingACommentToAPost() {
+        val wall = WallService
+
+        wall.add(newPost1)
+
+        val result = wall.createComment(1, comments = firstComment)
+        assertEquals(firstComment, result)
+    }
+
+    @Test(expected = WallService.PostNotFoundException::class)
+    fun shouldThrow() {
+        val wall = WallService
+
+        wall.add(newPost1)
+
+        wall.createComment(10, comments = firstComment)
     }
 }
